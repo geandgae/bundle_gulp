@@ -4,16 +4,21 @@
   "description": "",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "browser-sync": "^3.0.2",
     "del": "^7.1.0",
+    "fs-extra": "^11.2.0",
     "gulp": "^5.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-dart-sass": "^1.1.0",
+    "gulp-file-include": "^2.3.0",
     "gulp-javascript-obfuscator": "^1.1.6",
-    "gulp-terser": "^2.1.0",
-    "gulp-uglify": "^3.0.2"
+    "gulp-terser": "^2.1.0"
   }
 }

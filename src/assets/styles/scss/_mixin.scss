@@ -1,0 +1,628 @@
+@charset "utf-8";
+
+// ex
+// @mixin mixin-ex () {
+//   @content;
+// }
+// .ex{
+//   @include mixin-ex() {
+//     // @content; 속성 삽입
+//     background:#f0f0f0;
+//   };
+// }
+
+// svg test
+@function icon($iconName, $color:555555) {
+  $iconList: ( 
+    check: "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 477.867 477.867'%3E%3Cpath fill='%23#{$color}' d='M238.933 0C106.974 0 0 106.974 0 238.933s106.974 238.933 238.933 238.933 238.933-106.974 238.933-238.933C477.726 107.033 370.834.141 238.933 0zm0 443.733c-113.108 0-204.8-91.692-204.8-204.8s91.692-204.8 204.8-204.8 204.8 91.692 204.8 204.8c-.122 113.058-91.742 204.678-204.8 204.8z'/%3E%3Cpath fill='%23#{$color}' d='M370.046 141.534c-6.614-6.388-17.099-6.388-23.712 0l-158.601 158.6-56.201-56.201c-6.548-6.78-17.353-6.967-24.132-.419-6.78 6.548-6.967 17.353-.419 24.132.137.142.277.282.419.419l68.267 68.267c6.664 6.663 17.468 6.663 24.132 0l170.667-170.667c6.548-6.779 6.36-17.583-.42-24.131z'/%3E%3C/svg%3E",
+    check2: "22"
+  );
+  $icon: map-get($iconList, $iconName);
+  @return url("data:image/svg+xml;charset=utf8,#{$icon}");
+}
+
+$icon-1 : icon(check);
+$icon-2 : icon(check2);
+
+.icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+	
+  &.check {
+    background-image: $icon-1;
+  }
+  &.check2 {
+    // background-image: icon(check);
+    background-image: $icon-2;
+}
+}
+
+
+
+// mixin add-ge
+// image replacement
+@mixin ir($width: 0) {
+  border: $width;
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+}
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  // ie구버전용
+  margin: -1px; 
+}
+.ir {
+  display: block;
+  overflow: hidden;
+  font-size: 1px;
+  line-height: 0;
+  color: transparent;
+}
+// 스크린리더가 읽을 필요는 없지만 마크업 구조상 필요한 경우
+.screen_out {
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  text-indent: -9999px;
+}
+// 중요한 이미지 대체텍스트로 이미지 off 시 에도 대체 텍스트를 보여주고자 할때
+.ir_wa{
+	display:block;
+	overflow:hidden;
+	position:relative;
+	z-index:-1;
+	width:100%;
+	height:100%
+}
+
+
+// ellipsis
+@mixin ellipsis($line: 1) {
+  @if ($line == 1) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line;
+  }
+}
+// size
+@mixin size($w, $h: $w) {
+  width: $w;
+  height: $h;
+}
+// flex-center
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+}
+//가로 가운데 정렬
+@mixin posX {
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  margin-left: 0 !important;
+}
+//세로 중앙 정렬
+@mixin posY {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin-top: 0 !important;
+}
+//가로 세로 가운데로
+@mixin posXY {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+}
+// vs-b
+@mixin vs-b {
+  display: block;
+  content: "";
+}
+// vs-ib
+@mixin vs-ib {
+  display: inline-block;
+  content: "";
+}
+// 스크롤바 삭제
+@mixin scroll-hide {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+// make-arrow
+@mixin make-arrow($w: 0.12rem, $pl: 0, $pt: $pl, $line: 1px, $color: #959595, $deg: -45) {
+  position: relative;
+  &::after {
+    position: absolute;
+    top: $pt;
+    left: $pl;
+    content: "";
+    @include size($w, $h: $w);
+    border-top: $line solid $color;
+    border-left: $line solid $color;
+    transform: rotate($deg + deg);
+  }
+}
+// make-x
+@mixin make-x($w: 0.26rem, $line: 1px, $color: #717171) {
+  position: relative;
+  @include size($w, $h: $w);
+  &::before,
+  &::after {
+    display: block;
+    content: "";
+    position: absolute;
+    left: $w / 2;
+    height: 100%;
+    width: $line;
+    background-color: $color;
+  }
+  &::before {
+    transform: rotate(45deg);
+  }
+  &::after {
+    transform: rotate(-45deg);
+  }
+}
+// @mixin make-x-test {
+//   display:block;
+//   &::after {
+//     display: block;
+//     content: "\00d7";
+//     font-size:15pt;
+//   }
+// }
+// 라디오,체크박스 리셋
+@mixin check-reset {
+  display: block;
+  input[type="checkbox"],
+  input[type="radio"] {
+    display: none;
+  }
+  input + label {
+    background: none;
+    line-height: normal;
+    min-height: unset;
+    width: auto !important;
+    padding: 0;
+    @include flex-center;
+  }
+  input:checked + label {
+    background: none;
+  }
+}
+
+// 클리어
+@mixin clear {
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+// 미디어 쿼리 
+$breakpoint-mobile : 300px;
+//모바일
+@mixin mobile {
+  @media screen and (max-width: #{$breakpoint-mobile}) {
+    @content;
+  }
+}
+//테블릿
+@mixin tablet {
+  @media screen and (max-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}
+//데스크탑
+@mixin desktop {
+  @media screen and (min-width: #{$breakpoint-desktop}) {
+    @content;
+  }
+}
+
+// 미디어 쿼리 
+$devices: (
+  mobile: 320px,
+  tablet: 768px,
+  desktop: 1280px
+);
+  
+@mixin mq($device) {
+  @if map-has-key($devices, $device) {
+    $device-width: map-get($devices, $device);
+    @media screen and (min-width: #{$device-width}) {
+      @content;
+    }
+  } @else {
+    @warn 'Invalid breakpoint: #{$device}.';
+  }
+}
+
+// backgroun 리팩토링
+@mixin background($url, $x, $y, $width, $height) {
+  background-image: url($url);
+  background-position: ($x) ($y);
+  background-size: $width $height;
+}
+
+
+
+
+
+
+
+// @mixin@  margin padding 등 size별로 미리세팅 @mixin@
+// 기본폰트 12px 로 진행 추가되는 폰트개수만큼 증감숫자를 넣어주면된다.
+$font-base: 12;
+@mixin fontSizeCreate($length: 0) {
+  @for $i from 0 through $length {
+    .font-#{$i + $font-base} {
+      font-size: $font-base + $i + px;
+    }
+  }
+}
+// @include fontSizeCreate(50);
+
+// @mixin@ width size 타입 @mixin@
+$widthSize: 10;
+@mixin widthType($length: 0) {
+  @for $i from 0 through $length {
+    .w-#{$i*$widthSize} {
+      width: $widthSize * $i + px !important;
+    }
+  }
+}
+// @include widthType(50);
+
+$heightSize: 10;
+@mixin HeightType($length: 0) {
+  @for $i from 0 through $length {
+    .h-#{$i*$heightSize} {
+      height: $heightSize * $i + px !important;
+    }
+  }
+}
+// @include HeightType(20);
+
+@mixin styleNone($propStyle) {
+  &:last-child {
+    #{$propStyle}: none;
+  }
+}
+
+// @mixin@  margin padding 등 size별로 미리세팅 @mixin@
+$sizes: 0, 5, 10, 15, 20, 25, 30, 35, 40, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100;
+@mixin space($value: "margin", $name: "all", $dir: "left", $dir2: "top", $multi: 1) {
+  $valueName: "";
+  @if $value == margin {
+    $valueName: "m";
+  } @else if $value == padding {
+    $valueName: "p";
+  }
+  @each $size in $sizes {
+    @if $name == all {
+      .#{$valueName}-#{$size} {
+        #{$value}: $size + px !important;
+      }
+    } @else {
+      .#{$valueName}-#{$name}-#{$size} {
+        #{$value}-#{$dir}: $size + px !important;
+        @if $multi > 1 {
+          #{$value}-#{$dir2}: $size + px !important;
+        }
+      }
+    }
+  }
+}
+// single
+// @include space("margin", "t", "top", 1);
+// @include space("margin", "b", "bottom", 1);
+// @include space("margin", "l", "left", 1);
+// @include space("margin", "r", "right", 1);
+// @include space("padding", "t", "top", 1);
+// @include space("padding", "b", "bottom", 1);
+// @include space("padding", "l", "left", 1);
+// @include space("padding", "r", "right", 1);
+// // double
+// @include space("margin", "tb", "top", "bottom", 2);
+// @include space("margin", "lr", "left", "right", 2);
+// @include space("padding", "tb", "top", "bottom", 2);
+// @include space("padding", "lr", "left", "right", 2);
+// //all
+// @include space("margin");
+// @include space("padding");
+
+@mixin prefix($property, $value) {
+  $prefixes: webkit, moz, ms, o;
+  @each $prefix in $prefixes {
+    #{'-' + $prefix + '-' + $property}: $value;
+  }
+  // 기본
+  #{$property}: $value;
+}
+@mixin transition($prop: all, $duration: 0.5s, $timing: ease, $delay: 0) {
+  transition: $prop $duration $timing $delay;
+}
+
+@mixin notoFont($weight: light, $color: #000) {
+  @if $weight==bold {
+    font-family: "NotoSansKR-Bold";
+    color: $color;
+  } @else if $weight==light {
+    font-family: "NotoSansKR-Light";
+    color: $color;
+  } @else if $weight==medium {
+    font-family: "NotoSansKR-Medium";
+    color: $color;
+  } @else if $weight==thin {
+    font-family: "NotoSansKR-Thin";
+    color: $color;
+  } @else if $weight==regular {
+    font-family: "NotoSansKR-Regular";
+    color: $color;
+  } @else if $weight==black {
+    font-family: "NotoSansKR-Black";
+    color: $color;
+  } @else if $weight==demilight {
+    font-family: "NotoSansKR-DemiLight";
+    color: $color;
+  }
+}
+@mixin jungFont($weight: 110, $color: #000) {
+  @if $weight==110 {
+    font-family: "jung-110";
+    color: $color;
+  } @else if $weight==120 {
+    font-family: "jung-120";
+    color: $color;
+  } @else if $weight==130 {
+    font-family: "jung-130";
+    color: $color;
+  } @else if $weight==140 {
+    font-family: "jung-140";
+    color: $color;
+  } @else if $weight==150 {
+    font-family: "jung-150";
+    color: $color;
+  } @else if $weight==160 {
+    font-family: "jung-160";
+    color: $color;
+  } @else if $weight==170 {
+    font-family: "jung-170";
+    color: $color;
+  }
+}
+@mixin robotoFont($weight: regular, $color: #000) {
+  @if $weight==bold {
+    font-family: "Roboto-Bold";
+    color: $color;
+  } @else if $weight==italic {
+    font-family: "Roboto-Italic";
+    color: $color;
+  } @else if $weight==light {
+    font-family: "Roboto-Light";
+    color: $color;
+  } @else if $weight==medium {
+    font-family: "Roboto-Medium";
+    color: $color;
+  } @else if $weight==regular {
+    font-family: "Roboto-Regular";
+    color: $color;
+  } @else if $weight==thin {
+    font-family: "Roboto-Thin";
+    color: $color;
+  }
+}
+
+// @mixin@ keyword Arguments
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+  position: $position;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+// animation
+@mixin rotateAnimate($deg, $time, $delay) {
+  transition: all $time ease $delay;
+  transform: rotate($deg);
+}
+
+// @mixin@  mediaQuery 디바이스별 적용 @mixin@
+@mixin mobile {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+@mixin tablet {
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media screen and (min-width: 1024px) {
+    @content;
+  }
+}
+
+// 쑥쑥데이 규진
+@mixin babyLocalWrap($btnWidth, $btnHeight) {
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  font-family: "Apple SD Gothic Neo", AppleGothic, "Malgun Gothic", Dotum, sans-serif;
+
+  .button_area {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    width: $btnWidth;
+    height: $btnHeight;
+    margin: 0 auto;
+    text-align: center;
+    @include clearBoth();
+
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      font-size: 0;
+      text-align: center;
+      text-indent: -999rem;
+    }
+  }
+
+  .notice_wrap {
+    position: relative;
+    width: 100%;
+    a {
+      display: block;
+      width: 1.52rem;
+      height: 0.31rem;
+      margin: 0 auto;
+      font-size: 0;
+      text-indent: -999rem;
+      text-align: center;
+    }
+    .notice_area {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 0;
+      z-index: 1;
+    }
+    .notice_cnt {
+      margin-top: 0.15rem;
+      padding: 0.5rem 0.4rem;
+      box-sizing: border-box;
+      background: #fff;
+      font-size: 0.2rem;
+      line-height: 0.32rem;
+      color: #333;
+      letter-spacing: 0.01rem;
+      text-align: left;
+      a {
+        display: inline-block;
+        width: auto;
+        font-weight: bold;
+        font-size: 0.18rem;
+        line-height: 0.29rem;
+        color: #000;
+      }
+      p {
+        line-height: 1.3;
+      }
+    }
+  }
+  @content;
+}
+
+// 카페고리 - 규진 쑥쑥데이
+// @mixin babyLocalWrap - 쑥쑥데이 메인 페이지 기본 레이아웃
+// $btnWidth - 페이지 내에 많이 사용하는 버튼 가로값 , $btnHeight -페이지 내에 많이 사용하는 버튼 세로값
+@mixin babyLocalWrap($btnWidth, $btnHeight) {
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  font-family: "Apple SD Gothic Neo", AppleGothic, "Malgun Gothic", Dotum, sans-serif;
+
+  .button_area {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    width: $btnWidth;
+    height: $btnHeight;
+    margin: 0 auto;
+    text-align: center;
+    @include clearBoth();
+
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      font-size: 0;
+      text-align: center;
+      text-indent: -999rem;
+    }
+  }
+
+  .notice_wrap {
+    position: relative;
+    width: 100%;
+    a {
+      display: block;
+      width: 1.52rem;
+      height: 0.31rem;
+      margin: 0 auto;
+      font-size: 0;
+      text-indent: -999rem;
+      text-align: center;
+    }
+    .notice_area {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 0;
+      z-index: 1;
+    }
+    .notice_cnt {
+      margin-top: 0.15rem;
+      padding: 0.5rem 0.4rem;
+      box-sizing: border-box;
+      background: #fff;
+      font-size: 0.2rem;
+      color: #333;
+      letter-spacing: 0.01rem;
+      text-align: left;
+      a {
+        display: inline-block;
+        width: auto;
+        font-weight: bold;
+        font-size: 0.18rem;
+        line-height: 0.29rem;
+        color: #000;
+      }
+      p {
+        line-height: 1.35;
+      }
+    }
+  }
+  @content;
+}
+
+// @mixin babyBackground - 쑥쑥데이 백그라운드 설정
+// bg_name : 이미지.jpg 또는 .png ,$btnPositionX : 백그라운드 가로 포지션 , $btnPositionY : 백그라운드 세로 포지션
+// $bgColor : null - > 기본 배경색 없음, 필요 시 입력 . 예) #fff
+@mixin babyBackground($bg_name, $btnPositionX: 0, $btnPositionY: 0, $bgColor: null) {
+  background: url("http://cdn.boribori.co.kr/Images_Web/2021/20211213_br_SookSookDay39451/" + $bg_name) $bgColor;
+  background-position: $btnPositionX $btnPositionY;
+  background-repeat: no-repeat;
+}

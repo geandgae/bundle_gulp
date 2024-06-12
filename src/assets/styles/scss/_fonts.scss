@@ -1,0 +1,21 @@
+// fonts variables
+$font-path: '../fonts/';
+
+// font-face mixin
+@mixin font-face($family, $weight, $style, $filename) {
+  @font-face {
+    font-family: $family;
+    font-style: $style;
+    font-weight: $weight;
+    src: url('#{$font-path}#{$filename}.ttf') format('truetype');
+  }
+}
+
+// NotoSansKR Thin
+@include font-face('NotoSansKR', 100, normal, 'NotoSansKR-Thin');
+
+// NotoSansKR Medium
+@include font-face('NotoSansKR', 400, normal, 'NotoSansKR-Medium');
+
+// NotoSansKR ExtraBold
+@include font-face('NotoSansKR', 700, normal, 'NotoSansKR-ExtraBold');

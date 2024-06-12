@@ -1,0 +1,280 @@
+@charset "utf-8";
+
+body {
+  
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 200px;
+  // background-color: rgb(196, 196, 196);
+  div {
+    width: 100%;
+    // background-color: $color-primary;
+    @include flex-center;
+  }
+  article {
+    a {
+      display: block;
+      font-size: 16px;
+      margin: 5px;
+    }
+  }
+}
+
+.noto {
+  font-family: 'NotoSansKR', sans-serif;
+  font-weight: 100;
+  font-size: 20px;
+}
+
+@include mq(mobile) {
+  div {
+    padding: 0;
+    &.btn {
+      width: 100%;
+    }
+    .btn {
+      width: 200%;
+      &:hover {
+        background-color: red;
+      }
+    }
+  }
+
+  .test {
+    & .btn {
+      background-color: red;
+    }
+    .btn:hover & {
+      background-color: aqua;
+    }
+    span & {
+      width: 100px;
+    }
+  }
+
+  .wrap {
+    .box {
+      .outer_wrapper & {
+        margin: 0 auto;
+        width: 1024px;
+      }
+    }
+  }
+}
+
+@mixin create-context($classes...) {
+  @each $class in $classes {
+    .#{$class} & {
+      @content;
+    }
+  }
+}
+@mixin context--alternate-template {
+  @include create-context(header-01, header-02, header-03, header-04, header-05) {
+    @content;
+  }
+}
+
+.header {
+  height: 12em;
+  background: red;
+
+  @include context--alternate-template {
+    background: green;
+  }
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+@include keyframes(fadeIn) {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+  }
+}
+
+@mixin element($name) {
+  @at-root #{&}__#{$name} {
+    @content;
+  }
+}
+
+@mixin modifier($name) {
+  @at-root #{&}--#{$name} {
+    @content;
+  }
+}
+
+.demo {
+  color: red;
+
+  @include element(middleName) {
+    color: green;
+
+    @include modifier(modifier) {
+      color: blue;
+    }
+  }
+}
+
+a {
+  // 퍼센트 변경 함수
+  // width : percentage(13/25); // 52%
+
+  // 반올림 함수
+  width: round(2.4); // 2
+
+  // 올림 함수
+  width: ceil(2.2); // 3
+
+  // 내림 함수
+  width: floor(2.6); // 2
+
+  // 절대값 함수
+  width: abs(-24); // 24
+
+  // 비교하여 작은것을 반환하는 함수
+  width: min(10px, 12px); // 10px
+
+  // 비교하여 큰것을 반환하는 함수
+  width: max(10px, 12px); // 12px
+
+  // 난수 함수
+  width: random(1); // 0~1
+}
+
+a {
+  font-size: ceil(12.9) + px;
+  padding: floor(2.6) + px;
+  margin: max(10px, 12px);
+  top: min(10px, 12px);
+}
+
+// 변수 설정
+$unit-width: 40px;
+$gutter-width: 10px;
+
+// grid-width 사용자 정의 함수(@function)
+@function grid-width($n: 1) {
+  // 연산 결과 반환(@return)
+  @return $n * $unit-width + ($n - 1) * $gutter-width;
+}
+
+#sidebar {
+  // grid-width 함수 호출 결과 값 반환(전달인자 5)
+  width: grid-width(5); // 5 * 40 + (5-1) * 10 = 240px
+}
+
+// px 값을 em 단위로 변경하는 함수
+@function px2em($font_size: 1, $base_font_size: 16) {
+  // @return $font_size / $base_font_size + em;
+  // @return math.div($font-size, $base-font-size) + em;
+  @return calc($font-size / $base-font-size) + em;
+}
+
+body {
+  // 함수 호출
+  color: px2em(12, 20); // 12/20 + em = 0.6em
+}
+
+// 단위 제거 함수
+@function deUnit($value) {
+  $du_var: $value * 0 + 1;
+  @return calc($value / $du_var);
+  // @return math.div($value, $value * 0 + 1);
+  // @return calc($value / ($value * 0 + 1));
+}
+
+// PX → REM 함수
+@function PX2REM($px, $base: 16) {
+  // @return (deUnit($px) / $base) * 1rem
+  @return deUnit(calc($px / $base)) * 1rem;
+}
+.demo01 {
+  font-size: PX2REM(16px);
+}
+
+// REM → PX 함수
+@function REM2PX($rem, $base: 16) {
+  @return deUnit($rem * $base) * 1px;
+}
+.demo02 {
+  font-size: REM2PX(1rem);
+}
+.demo03 {
+  font-size: REM2PX(2rem, 10);
+}
+
+// REM 단축 함수
+@function REM($px, $base: 16) {
+  @return PX2REM(deUnit($px), $base);
+}
+.demo04 {
+  font-size: REM(20px, 16);
+}
+
+// PX → EM 함수
+@function PX2EM($px, $base: 16) {
+  // @return (deUnit($px) / $base) * 1em
+  @return deUnit(calc($px / $base)) * 1em;
+}
+.demo05 {
+  font-size: PX2EM(16px, 10);
+}
+
+// EM → PX 함수
+@function EM2PX($px, $base: 16) {
+  @return (deUnit($px) * $base) * 1px;
+}
+.demo06 {
+  font-size: EM2PX(1em, 10);
+}
+
+@function text-contrast($bg-color, $val: 70%) {
+  // 변수 $value 초기 값 설정 null
+  $value: null;
+
+  // 전달인자 값을 확인 (유효성 검사)
+  @if (type-of($bg-color) != color) {
+    @warn "첫번째 전달인자 값은 컬러 값이어야 합니다. 예) #fff, red, rgba()";
+    @debug "사용자가 전달한 값은 #{$bg-color}입니다.";
+  }
+  @if (lightness($bg-color) > 50%) {
+    $value: darken($bg-color, $val);
+  } @else {
+    $value: lighten($bg-color, $val);
+  }
+  // 함수는 반드시 return 값이 필요하다
+  @return $value;
+}
+
+//  Photoshop 자간 간격 설정
+@function lt_Spacing($spacing) {
+  @if (type-of($spacing) !=number) {
+    @warn "전달한 인자 값은 #{$spacing}입니다 제대로 된 값(숫자)을 전달해주세요.";
+  }
+  @return calc(deUnit($spacing) / 1000);
+}
+
+.demo-01 {
+  background-color: text-contrast(#c4c4c4, 50%);
+}
+
+.demo-02 {
+  letter-spacing: lt_Spacing(16);
+}
