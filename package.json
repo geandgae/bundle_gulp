@@ -1,12 +1,19 @@
 {
   "name": "bundle_gulp",
   "version": "1.0.0",
-  "description": "gulp",
-  "main": "index.js",
+  "description": "",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^7.1.0",
+    "gulp": "^5.0.0",
+    "gulp-javascript-obfuscator": "^1.1.6",
+    "gulp-terser": "^2.1.0",
+    "gulp-uglify": "^3.0.2"
+  }
 }

@@ -1,0 +1,30 @@
+[
+  { 
+    "id": "table_02",
+    "depth1": "ct00_title",
+    "depth2": "d99",
+    "depth3": "d3",
+    "depth4": "d4",
+    "view_id": "view_id",
+    "view_name": "view_name",
+    "view_url": "aaa/aaa.url",
+    "date": "2022-10-28",
+    "state": "fin",
+    "author": "ct00_author",
+    "note": []
+  },
+  { 
+    "id": "table_02",
+    "depth1": "ct00_title",
+    "depth2": "d99",
+    "depth3": "d3",
+    "depth4": "d4",
+    "view_id": "view_id",
+    "view_name": "view_name",
+    "view_url": "aaa/aaa.url",
+    "date": "2022-10-28",
+    "state": "fin",
+    "author": "ct00_author",
+    "note": []
+  }
+]
