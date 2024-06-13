@@ -1,9 +1,22 @@
 <header>
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="./pages/page1.html">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </nav>
+      @@include("./nav.html", {
+        navList : [
+          {
+            link : "/",
+            name : "index"
+          },
+          {
+            link : "@@html/pages/page1.html",
+            name : "page1"
+          },
+          {
+            link : "@@html/pages/page2.html",
+            name : "page2"
+          },
+          {
+            link : "@@html/pages/main.html",
+            name : "main"
+          },
+        ]
+      })
     </header>

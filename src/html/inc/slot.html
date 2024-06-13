@@ -1,0 +1,28 @@
+<div>
+      <p>slot!!!</p>
+    </div>
+    @@if (slot === "opt1") {
+      <div>slot opt1</div>
+      @@if (sub === true) {
+        <div>sub</div>
+      }
+    }
+    @@if (slot === "opt2") {
+      <div>slot opt2</div>
+      @@if (sub === true) {
+        <div>sub</div>
+      }
+    }
+    @@if (test === true) {
+      @@contents
+    }
+    @@if (test2 === true) {
+      <div>test2</div>
+      @@contents2
+      <hr>
+    }
+    @@if (test3 === true) {
+      <div>test3</div>
+      @@contents3
+      <hr>
+    }

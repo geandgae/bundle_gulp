@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    @@include("../inc/head.html", {
+      "title": "main",
+      "description": "main Description"
+    })
+  </head>
+  <body>
+    @@include("../inc/header.html")
+    <div>main</div>
+    @@include("../inc/slot.html", {
+      "slot" : "opt1",
+      "sub" : true,
+      "test" : true,
+      "test2" : true,
+      "test3" : true,
+      "contents" : '<div class="test">test</div>',
+      "contents2" : '@@include("../inc/footer.html")',
+      "contents3" : '@@include("../inc/nav.html",{navList:[{link:"/",name:"index"},{link:"@@html/pages/page1.html",name:"page1"},{link:"@@html/pages/page2.html",name:"page2"},{link:"@@html/pages/main.html",name:"main"},]})',
+    })
+    @@include("../inc/footer.html")
+
+    <div>gulp-template 예제</div>
+    @@include("../inc/navtest.html")
+  </body>
+</html>

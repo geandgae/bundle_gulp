@@ -6,7 +6,7 @@ body {
   margin: 0;
   width: 100%;
   height: 200px;
-  // background-color: rgb(196, 196, 196);
+  // background-color: rgba(0, 0, 0, 0.8);
   div {
     width: 100%;
     // background-color: $color-primary;
@@ -19,6 +19,10 @@ body {
       margin: 5px;
     }
   }
+}
+
+.test {
+  color: red;
 }
 
 .noto {
